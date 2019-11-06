@@ -1,0 +1,150 @@
+#
+# train.py configuration file
+# ----------------------------
+#
+
+expirement_base_path: "/data01/hofstaetter/msmarco-passage-experiments"
+tqdm_disabled: False
+
+
+#
+# training paths
+#
+train_tsv: "/data01/hofstaetter/data/msmarco-passage/train/triples.train.small-split4/*"
+
+#
+# continuous validation path
+#
+
+validation_cont:
+  tsv: "/data01/hofstaetter/data/msmarco-passage/validation/dev.subset.bm25_plain_top100-split6/*"
+  qrels: "/data01/hofstaetter/data/msmarco-passage/qrels/qrels.dev.tsv"
+  candidate_set_from_to: [5,100]
+  candidate_set_path: "/data01/hofstaetter/data/msmarco-passage/fs_results/plain_bm25_best_dev.subset_top100.txt"
+  save_only_best: True
+
+#
+# one time at the end validation (disable by commenting it out)
+#
+
+validation_end:
+  top1000:
+    tsv: "/data01/hofstaetter/data/msmarco-passage/validation/dev.subset.bm25_plain_top1000-split6/*"
+    qrels: "/data01/hofstaetter/data/msmarco-passage/qrels/qrels.dev.tsv"
+    candidate_set_from_to: [1,1000]
+    candidate_set_path: "/data01/hofstaetter/data/msmarco-passage/fs_results/plain_bm25_best_dev.subset_top1000.txt"
+    save_secondary_output: True
+
+  unbiased-dev:
+    tsv: "/newstorage2/hofstaetter/msmarco-passage/dev_unbiased/unbiased-test-tuples.tsv"
+    qrels: "/data01/hofstaetter/data/msmarco-passage/qrels/qrels.dev.tsv"
+    candidate_set_from_to: [1,1000]
+    candidate_set_path: "/newstorage2/hofstaetter/msmarco-passage/dev_unbiased/unbiased-test-bm25.best.txt"
+    save_secondary_output: False
+
+  sent-shuffle-dev:
+    tsv: "/newstorage2/hofstaetter/msmarco-passage/validation/dev.subset.sentshuffle.tsv"
+    qrels: "/data01/hofstaetter/data/msmarco-passage/qrels/qrels.dev.tsv"
+    candidate_set_from_to: [1,1000]
+    candidate_set_path: "/data01/hofstaetter/data/msmarco-passage/fs_results/plain_bm25_best_dev.subset_top1000.txt"
+    save_secondary_output: False
+
+  sent-reverse-dev:
+    tsv: "/newstorage2/hofstaetter/msmarco-passage/validation/dev.subset.sentreverse.tsv"
+    qrels: "/data01/hofstaetter/data/msmarco-passage/qrels/qrels.dev.tsv"
+    candidate_set_from_to: [1,1000]
+    candidate_set_path: "/data01/hofstaetter/data/msmarco-passage/fs_results/plain_bm25_best_dev.subset_top1000.txt"
+    save_secondary_output: False
+    
+  #squad-top100:
+  #  tsv: "/newstorage2/hofstaetter/squad-retrieval/test_tuples/dev-v2-tuples.tsv"
+  #  qrels: "/newstorage2/hofstaetter/squad-retrieval/dev-v2.0-qrels.txt"
+  #  candidate_set_from_to: [1,1000]
+  #  candidate_set_path: "/newstorage2/hofstaetter/squad-retrieval/fs_results/dev.bm25top100.txt"
+  #  save_secondary_output: False
+    
+  #top8000_plain:
+  #  tsv: "/data01/hofstaetter/data/msmarco-passage/validation/dev.subset.bm25_plain_top8000-split6/*"
+  #  qrels: "/data01/hofstaetter/data/msmarco-passage/qrels/qrels.dev.tsv"
+  #  candidate_set_from_to: [5,8000]
+  #  candidate_set_path: "/data01/hofstaetter/data/msmarco-passage/fs_results/plain_bm25_best_dev.subset_top30k.txt"
+  #  save_secondary_output: False
+#
+#  top8000_doc2query:
+#    tsv: "/data01/hofstaetter/data/msmarco-passage/validation/dev.subset.doc2queryconcat_top8000-split6/*"
+#    qrels: "/data01/hofstaetter/data/msmarco-passage/qrels/qrels.dev.tsv"
+#    candidate_set_from_to: [5,8000]
+#    candidate_set_path: "/data01/hofstaetter/data/msmarco-passage/fs_results/doc2query10kconcat_bm25_best_dev.subset_top30k.txt"
+#    save_secondary_output: False
+#
+#  top1000_doc2query_exp:
+#    tsv: "/data01/hofstaetter/data/msmarco-passage/validation/dev.subset.doc2query_expanded_top1000-split6/*"
+#    qrels: "/data01/hofstaetter/data/msmarco-passage/qrels/qrels.dev.tsv"
+#    candidate_set_from_to: [5,1000]
+#    candidate_set_path: "/data01/hofstaetter/data/msmarco-passage/fs_results/doc2query10kconcat_bm25_best_dev.subset_top30k.txt"
+#    save_secondary_output: False
+
+
+#
+# test paths (names & datasets must match up with validation end -> for correct use of fixed cs@n)
+#
+test:
+  top1000:
+    tsv: "/data01/hofstaetter/data/msmarco-passage/test/dev.not-subset.bm25_plain_top1000-split6/*"
+    qrels: "/data01/hofstaetter/data/msmarco-passage/qrels/qrels.dev.tsv"
+    candidate_set_max: 1000
+    candidate_set_path: "/data01/hofstaetter/data/msmarco-passage/fs_results/plain_bm25_best_dev.not-subset_top1000.txt"
+    save_secondary_output: False
+
+
+#
+# leaderboard (private eval set without qrels)
+#
+
+# official trec 2019 test queries
+leaderboard:
+  2019_full_rank:
+    tsv: "/data01/hofstaetter/data/msmarco-passage/leaderboard/test2019.bm25_plain_top1000-split6/*"
+    save_secondary_output: True
+  2019_rerank_1000:
+    tsv: "/data01/hofstaetter/data/msmarco-passage/leaderboard/test2019re_rank1000/*"
+    save_secondary_output: True
+  msmarco_leaderboard_eval:
+    tsv: "/data01/hofstaetter/data/msmarco-passage/leaderboard/eval.subset.bm25_plain_top1000-split6/*"
+    save_secondary_output: True
+
+#
+# pre-trained word representation inputs (embedding layer)
+# --------------------------------------------------------
+#
+
+#
+# token_embedder_type = embedding 
+#
+#pre_trained_embedding: "/data01/hofstaetter/data/glove/glove.42B.300d.txt"
+pre_trained_embedding: "/dev/shm/sebastians_ram/glove.42B.300d-wheader.txt"
+
+pre_trained_embedding_dim: 300
+#vocab_directory: "/data01/hofstaetter/data/msmarco-passage/vocabs/lower_5"
+vocab_directory: "/data01/hofstaetter/data/msmarco/allen_vocab_lower_glove42/"
+
+#
+# token_embedder_type =fasttext
+#
+fasttext_vocab_mapping: "/data01/hofstaetter/data/msmarco-passage/fasttext/cc300d_full_mapping.txt"
+fasttext_weights: "/data01/hofstaetter/data/msmarco-passage/fasttext/cc300d_weights.npy"
+fasttext_max_subwords: 60
+fasttext_merge_mode: "mean" # or sum
+
+#
+# token_embedder_type = bert_cls 
+#
+bert_pretrained_model: "bert-large-uncased" # or bert-large-uncased,bert-large-cased,bert-base-cased
+bert_trainable: True
+
+#
+# pre-computed idf path
+#
+idf_path: "/data01/hofstaetter/data/msmarco-passage/idf/vocab_full_log_idf.txt" # will be loaded only for models using it (set in the train.py model selection block)
+idf_path_fasttext: "/data01/hofstaetter/data/msmarco-passage/idf/vocab_full_log_idf_fasttext.npy" # if token_embedder_type: "fasttext"
+idf_trainable: False
