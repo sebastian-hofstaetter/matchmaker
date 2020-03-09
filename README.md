@@ -1,6 +1,8 @@
 # Welcome to transformer-kernel-ranking 👋
 
-*S. Hofstätter, M. Zlabinger, and A. Hanbury 2019. TU Wien @ TREC Deep Learning ’19 – Simple Contextualization for Re-ranking.*
+*S. Hofstätter, M. Zlabinger, and A. Hanbury 2019. Interpretable \& Time-Budget-Constrained Contextualization for Re-Ranking. In Proc. of ECAI*
+
+https://arxiv.org/abs/2002.01854
 
 We present the TK (Transformer-Kernel) model – inspired by the success of the Transformer-based BERT model and the simplicity of KNRM (Kernel-based Neural Ranking Model). TK employs a small number of low-dimensional Transformer layers to contextualize query and document word embeddings. TK scores the interactions of the contextualized representations with simple, yet effective soft-histograms based on the kernel-pooling technique. Additionally, we enhance kernel-pooling with document length normalization. 
 
@@ -19,6 +21,16 @@ The differences of TK to previous kernel-pooling methods are:
 
 If you want to jump straight to the model code: [it's here](matchmaker/models/tk.py)!
 
+Please cite as: 
+````
+@inproceedings{Hofstaetter2020_ecai,
+ author = {Hofst{\"a}tter, Sebastian and Zlabinger, Markus and Hanbury, Allan},
+ title = {{Interpretable \& Time-Budget-Constrained Contextualization for Re-Ranking}},
+ booktitle = {Proc. of ECAI},
+ year = {2020},
+}
+````
+
 ## The matchmaker library
 
 * train.py is the main trainer -> it uses a multiprocess batch generation pipeline
@@ -28,12 +40,10 @@ If you want to jump straight to the model code: [it's here](matchmaker/models/tk
 
 1. Get the msmarco dataset & clone this repository to a pc with 1 cuda device
 2. Prepare the dataset for multiprocessing:
-    * Use ``./generate_file_split.sh`` 1x for training.tsv and 1x for top1000dev.tsv (the validation set)
-    * You have to decide now on the number of data preparation processes you want to use for training and validation
-    * You have to decide on the batch size 
-    * Run ``./generate_file_split.sh <base_file> <n file chunks> <output_folder_and_prefix> <batch_size>`` for train + validation sets
-    * Take the number of batches that are output at the end of the script and put them in your config .yaml
-    * The number of processes for preprocessing depends on your local hardware, the preprocesses need to be faster at generating the batches then the gpu at computing the results for them (validation is much faster than training, so you need more processes)
+    * Generate the validation sets (BM25 results from Anserini) via matchmaker/preprocessing/generate_validation_input_from_candidate_set.py
+    * Use ``./generate_file_split.sh`` 1x for training.tsv and 1x for the validation set 
+    * You have to decide now on the number of data preparation processes you want to use for training and validation (4-6 should do) each file gets one loading process
+    * The number of processes for preprocessing depends on your local hardware, the preprocesses need to be faster at generating the batches then the gpu at computing the results for them
 3. Create a new config .yaml in configs/ with all your local paths for train and validation/test files
     * The train and validation paths should be the output folder of 2 with a star at the end (the paths will be globed to get all files)`
 4. Create a new conda env and install the requirements for python 3.7 via conda: pytorch, allennlp, blingfire
