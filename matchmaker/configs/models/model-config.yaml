@@ -20,7 +20,7 @@ random_seed: 208973249 # real-random (from random.org)
 
 # needs to be the same model + model_config + token_embedder_type + vocabulary!
 # ATTENTION !! this makes reproducability awfully difficult 
-warmstart_model_path: "/data01/hofstaetter/msmarco-passage-experiments/2019-11-05_1038_tk_pe_bias_diffqd_glovevoc/best-model.pytorch-state-dict"
+#warmstart_model_path: ""
 
 #
 # Models
@@ -30,15 +30,7 @@ warmstart_model_path: "/data01/hofstaetter/msmarco-passage-experiments/2019-11-0
 # * bert_cls also needs the token_embedder_type=bert_cls, as this will shake things up quite a bit 
 #
 
-#model: "Matchmaker_light_v4b" # available: knrm, conv_knrm, conv_knrm_same_gram, match_pyramid, knrm_ln, mv_lstm, pacrr,co_pacrr,duet,Matchmaker_light_v6a
-#model: "conv_knrm" 
-#model: "knrm" 
-#model: "pacrr" 
-#model: "TK_Native_v1"
-model: "TK_v6"
-#model: "bert_cls" 
-#model: "duet" 
-#model: "co_pacrr" 
+model: "TKL"
 
 #
 # optimization
@@ -68,7 +60,7 @@ learning_rate_scheduler_factor: 0.5
 # train loop settings
 #
 epochs: 3
-batch_size_train: 64
+batch_size_train: 32
 batch_size_eval: 256
 
 gradient_accumulation_steps: -1
@@ -80,7 +72,7 @@ early_stopping_patience: 35 # * validate_every_n_batches = batch count to check
 #
 
 # max sequence lengths, disable cutting off with -1
-max_doc_length: 200
+max_doc_length: 2000
 max_query_length: 30
 
 # min sequence lengths, disable cutting off with -1 , some models (paccr,duet) need this 
@@ -109,28 +101,9 @@ tk_att_ff_dim: 100
 tk_kernels_mu: [1.0, 0.9, 0.7, 0.5, 0.3, 0.1, -0.1, -0.3, -0.5, -0.7, -0.9]
 tk_kernels_sigma: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
 
-# tk v6
+# tk
 
-tk_use_pos_agnostic: True
-tk_use_position_bias: True
 tk_use_diff_posencoding: True
-tk_position_bias_bin_percent: 0.2
-tk_position_bias_absolute_steps: 4
-
-#tk_kernels_mu: [1.0, 0.9, 0.7, 0.5, 0.3, 0.1, -0.1, -0.3]
-#tk_kernels_sigma: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
-
-
-#tk_kernels_mu: [1.0, 0.8, 0.6, 0.4, 0.2, 0, -0.2, -0.4]
-#tk_kernels_sigma: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
-
-
-#tk_kernels_mu: [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.3, 0.1, -0.1, -0.3, -0.5, -0.7, -0.9]
-#tk_kernels_sigma: [0.05, 0.05, 0.05, 0.05, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
-
-#tk_kernels_mu: [1.0, 0.9, 0.8, 0.7, 0.6, 0.5,0.4, 0.3, 0.2, 0.1, 0, -0.1, -0.2, -0.3,-0.4, -0.5,-0.6, -0.7,-0.8, -0.9, -1]
-#tk_kernels_sigma: [0.043,0.043,0.043,0.043,0.043,0.043,0.043,0.043,0.043,0.043,0.043,0.043,0.043,0.043,0.043,0.043,0.043,0.043,0.043,0.043,0.043]
-
 
 knrm_kernels: 11
 

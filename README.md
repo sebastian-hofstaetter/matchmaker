@@ -1,8 +1,12 @@
 # Welcome to transformer-kernel-ranking 👋
 
-*S. Hofstätter, M. Zlabinger, and A. Hanbury 2019. Interpretable \& Time-Budget-Constrained Contextualization for Re-Ranking. In Proc. of ECAI*
+This repository is home to the TK and TKL neural re-ranking models. TK is a passage re-ranking model and TKL is an extension for long text (documents).
 
-https://arxiv.org/abs/2002.01854
+**TK:** *S. Hofstätter, M. Zlabinger, and A. Hanbury 2020. Interpretable \& Time-Budget-Constrained Contextualization for Re-Ranking. In Proc. of ECAI* https://arxiv.org/abs/2002.01854
+
+**TKL:** *S. Hofstätter, H. Zamani, B.Mitra, N. Craswell, and A. Hanbury 2020. Local Self-Attention over Long Text for Efficient Document Retrieval. In Proc. of SIGIR* https://arxiv.org/abs/2005.04908
+
+## TK: Transformer-Kernel
 
 We present the TK (Transformer-Kernel) model – inspired by the success of the Transformer-based BERT model and the simplicity of KNRM (Kernel-based Neural Ranking Model). TK employs a small number of low-dimensional Transformer layers to contextualize query and document word embeddings. TK scores the interactions of the contextualized representations with simple, yet effective soft-histograms based on the kernel-pooling technique. Additionally, we enhance kernel-pooling with document length normalization. 
 
@@ -17,19 +21,37 @@ The differences of TK to previous kernel-pooling methods are:
 - KNRM uses only word embeddings, therefore a match does not have context or positional information.
 - CONV-KNRM uses a local-contextualization with limited positional information in the form of n-gram learning with CNNs. It cross-matches all n-grams in n 2 match matrices, reducing the analyzability.
 
-**Explore the model results in detail [with our interactive explorer](https://neural-ir-explorer.ec.tuwien.ac.at/)!** 
+**Explore the TK model results in detail [with our interactive explorer](https://neural-ir-explorer.ec.tuwien.ac.at/)!** 
 
-If you want to jump straight to the model code: [it's here](matchmaker/models/tk.py)!
+## TKL: Transformer-Kernel
 
-Please cite as: 
+Neural networks, particularly Transformer-based architectures, have achieved significant performance improvements on several retrieval benchmarks. When the items being retrieved are documents, the time and memory cost of employing Transformers over a full sequence of document terms can be prohibitive. A popular strategy involves considering only the first n terms of the document. This can, however, result in a biased system that under retrieves longer documents. In this work, we propose a local self-attention which considers a moving window over the document terms and for each term attends only to other terms in the same window. This local attention incurs a fraction of the compute and memory cost of attention over the whole document. The windowed approach also leads to more compact packing of padded documents in minibatches resulting in additional savings. We also employ a learned saturation function and a two-staged pooling strategy to identify relevant regions of the document. The Transformer-Kernel pooling model with these changes can efficiently elicit relevance information from documents with thousands of tokens. We benchmark our proposed modifications on the document ranking task from the TREC 2019 Deep Learning track and observe significant improvements in retrieval quality as well as increased retrieval of longer documents at moderate increase in compute and memory costs.
+
+![](figures/tkl_architecture.png)
+
+
+If you want to jump straight to the model code: [it's here (TK)](matchmaker/models/tk.py) and  [here (TKL)](matchmaker/models/tkl.py)! 
+
+**Please cite TK as:**
 ````
-@inproceedings{Hofstaetter2020_ecai,
+@inproceedings{Hofstaetter2020_tk_ecai,
  author = {Hofst{\"a}tter, Sebastian and Zlabinger, Markus and Hanbury, Allan},
  title = {{Interpretable \& Time-Budget-Constrained Contextualization for Re-Ranking}},
  booktitle = {Proc. of ECAI},
  year = {2020},
 }
 ````
+
+**Please cite TKL as:**
+````
+@inproceedings{Hofstaetter2020_sigir,
+ author = {Hofst{\"a}tter, Sebastian and Zamani, Hamed and Mitra, Bhaskar and Craswell, Nick and Hanbury, Allan},
+ title = {{Local Self-Attention over Long Text for Efficient Document Retrieval}},
+ booktitle = {Proc. of SIGIR},
+ year = {2020},
+}
+````
+
 
 ## The matchmaker library
 

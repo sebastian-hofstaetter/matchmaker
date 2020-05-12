@@ -54,6 +54,7 @@ from models.co_pacrr import CO_PACRR
 from models.duet import Duet
 from models.drmm import DRMM
 from models.bert_cls import *
+from models.sigir20_tkl import TKL_sigir20
 
 from matchmaker.modules.neuralIR_encoder import *
 from matchmaker.modules.fasttext_token_embedder import *
@@ -157,6 +158,9 @@ if __name__ == "__main__":
     elif config["model"] == "TK_v2": model = TK_v2.from_config(config,word_embedder.get_output_dim())
 
     elif config["model"] == "TK_Native_v1": model = TK_Native_v1.from_config(config,word_embedder.get_output_dim())
+    elif config["model"] == "TKL":
+        model = TKL_sigir20.from_config(config,word_embedder.get_output_dim())
+        encoder_type = NeuralIR_Encoder_WithIdfs
 
     #
     # baselines with text only
