@@ -23,7 +23,7 @@ The differences of TK to previous kernel-pooling methods are:
 
 **Explore the TK model results in detail [with our interactive explorer](https://neural-ir-explorer.ec.tuwien.ac.at/)!** 
 
-## TKL: Transformer-Kernel
+## TKL: Transformer-Kernel for Long text
 
 Neural networks, particularly Transformer-based architectures, have achieved significant performance improvements on several retrieval benchmarks. When the items being retrieved are documents, the time and memory cost of employing Transformers over a full sequence of document terms can be prohibitive. A popular strategy involves considering only the first n terms of the document. This can, however, result in a biased system that under retrieves longer documents. In this work, we propose a local self-attention which considers a moving window over the document terms and for each term attends only to other terms in the same window. This local attention incurs a fraction of the compute and memory cost of attention over the whole document. The windowed approach also leads to more compact packing of padded documents in minibatches resulting in additional savings. We also employ a learned saturation function and a two-staged pooling strategy to identify relevant regions of the document. The Transformer-Kernel pooling model with these changes can efficiently elicit relevance information from documents with thousands of tokens. We benchmark our proposed modifications on the document ranking task from the TREC 2019 Deep Learning track and observe significant improvements in retrieval quality as well as increased retrieval of longer documents at moderate increase in compute and memory costs.
 
