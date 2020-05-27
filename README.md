@@ -30,7 +30,7 @@ Neural networks, particularly Transformer-based architectures, have achieved sig
 ![](figures/tkl_architecture.png)
 
 
-If you want to jump straight to the model code: [it's here (TK)](matchmaker/models/tk.py) and  [here (TKL)](matchmaker/models/tkl.py)! 
+If you want to jump straight to the model code: [it's here (TK)](matchmaker/models/tk.py) and  [here (TKL)](matchmaker/models/sigir20_tkl.py)! 
 
 **Please cite TK as:**
 ````
