@@ -1,0 +1,23 @@
+model: IDCM
+
+bert_pretrained_model: "distilbert-base-uncased" 
+bert_trainable: True
+
+idcm_sample_train_type: "lambdaloss"
+
+# disable sampling with -1
+idcm_sample_n: -1
+idcm_sample_context: "ck"
+idcm_use_mult_pos_importance: False
+idcm_top_k_chunks: 3
+idcm_chunk_size: 50
+idcm_overlap: 7
+
+# needs to be set
+#warmstart_model_path: "<path to init>"
+
+#submodel_train_cache_path: "<path to cache dir>"
+#submodel_validation_cache_path: "<path to 2nd cache dir>"
+
+submodel_train_cache_readonly: True
+submodel_validation_cache_readonly: true

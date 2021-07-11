@@ -1,0 +1,5 @@
+token_embedder_type: "bert_dot" # meaning the query and document sequences are independent padded tensors
+
+model: "maxP->bert_dot" 
+
+max_doc_length: 2000

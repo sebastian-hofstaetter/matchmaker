@@ -1,0 +1,9 @@
+token_embedder_type: "bert_dot" # meaning the query and document sequences are independent padded tensors
+model_input_type: independent
+model: Parade 
+
+idcm_chunk_size: 50
+idcm_overlap: 7
+
+parade_aggregate_layers: 2
+parade_aggregate_type: max # or tf

@@ -10,7 +10,7 @@ from allennlp.modules.matrix_attention.cosine_matrix_attention import CosineMatr
 
 class Conv_KNRM(nn.Module):
     '''
-    Paper: Convolutional Neural Networks for Soſt-Matching N-Grams in Ad-hoc Search, Dai et al. WSDM 18
+    Paper: Convolutional Neural Networks for Soft-Matching N-Grams in Ad-hoc Search, Dai et al. WSDM 18
 
     third-hand reference: https://github.com/NTMC-Community/MatchZoo/blob/master/matchzoo/models/conv_knrm.py (tensorflow)
     https://github.com/thunlp/EntityDuetNeuralRanking/blob/master/baselines/CKNRM.py (pytorch)
@@ -67,6 +67,33 @@ class Conv_KNRM(nn.Module):
         #
         # prepare embedding tensors
         # -------------------------------------------------------
+
+        # we assume 1 is the unknown token, 0 is padding - both need to be removed
+        #if len(query["tokens"].shape) == 2: # (embedding lookup matrix)
+#
+        #    # shape: (batch, query_max)
+        #    query_pad_oov_mask = (query["tokens"] > 1).float()
+        #    # shape: (batch, doc_max)
+        #    document_pad_oov_mask = (document["tokens"] > 1).float()
+#
+        #    # shape: (batch, query_max)
+        #    query_pad_mask = (query["tokens"] > 0).float()
+        #    # shape: (batch, doc_max)
+        #    document_pad_mask = (document["tokens"] > 0).float()
+#
+        #else: # == 3 (elmo characters per word)
+        #    
+        #    # shape: (batch, query_max)
+        #    query_pad_oov_mask = (torch.sum(query["tokens"],2) > 0).float()
+        #    # shape: (batch, doc_max)
+        #    document_pad_oov_mask = (torch.sum(document["tokens"],2) > 0).float()
+#
+        ##query_by_doc_mask_view = query_by_doc_mask.unsqueeze(-1)
+#
+        ## shape: (batch, query_max,emb_dim)
+        #query_embeddings = self.word_embeddings(query) * query_pad_oov_mask.unsqueeze(-1)
+        ## shape: (batch, document_max,emb_dim)
+        #document_embeddings = self.word_embeddings(document) * document_pad_oov_mask.unsqueeze(-1)
 
         query_pad_mask = query_pad_oov_mask
         document_pad_mask = document_pad_oov_mask

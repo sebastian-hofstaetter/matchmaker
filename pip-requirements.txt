@@ -1,0 +1,16 @@
+allennlp==2.5.1.dev20210625
+blingfire==0.1.7
+ftfy==6.0.3
+PyYAML==5.4
+tensorboard==2.5.0
+transformers==4.8.1
+rich==10.1.0
+# onnx stuff
+onnx==1.9.0                   
+onnxconverter-common==1.8.1   
+onnxruntime-gpu==1.8.0
+# extra for onnx optimizations (missing from the onnx dependencies, ups)
+sympy==1.8
+coloredlogs==15.0
+# optional: scann nearest neighbor lib (only works on linux, and installs a ton of tensorflow dependencies)
+#scann==1.2.2

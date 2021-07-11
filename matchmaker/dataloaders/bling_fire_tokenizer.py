@@ -1,4 +1,4 @@
-from allennlp.data.tokenizers.token import Token
+from allennlp.data.tokenizers import Token
 from blingfire import *
 from typing import List
 

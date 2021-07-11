@@ -1,0 +1,31 @@
+#
+# pairwise supervision (via static scores)
+#
+train_pairwise_distillation: True
+loss: "margin-mse"
+
+#
+# in batch teacher (via dynamic teacher)
+#
+in_batch_negatives: True
+in_batch_neg_lambda: 0.75
+in_batch_main_pair_lambda: 1
+in_batch_neg_loss: "margin-mse" #KLDivTeacherList
+
+dynamic_teacher: True
+dynamic_teacher_in_batch_scoring: True
+
+
+#
+# tas-balanced sampler
+#
+dynamic_sampler: True
+dynamic_sampler_type: tas_balanced
+dynamic_clusters_per_batch: 1
+tas_balanced_pair_strategy: "bins" # "random" or "bins" or "hard-margin"
+
+#
+# general train settings
+#
+batch_size_train: 32
+run_dense_retrieval_eval: True

@@ -1,0 +1,9 @@
+minimize_sparsity: True
+
+# only TK-Sparse supports sparsity minimization at the moment
+#model: "CIKM20_TK_Sparse"
+
+sparsity_loss_lambda_factor: 0.01
+sparsity_log_path: "sparsity-info.tsv"
+sparsity_reanimate: False
+sparsity_reanimate_bias: 0.5

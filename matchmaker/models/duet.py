@@ -36,7 +36,7 @@ class Duet(nn.Module):
         DROPOUT_RATE = 0
 
         NUM_POOLING_WINDOWS_DOC = 99
-        MAX_DOC_TERMS = 200
+        MAX_DOC_TERMS = 2000
         MAX_QUERY_TERMS = 30
         self.cosine_module = CosineMatrixAttention()
 

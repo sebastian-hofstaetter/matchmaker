@@ -183,6 +183,6 @@ class CO_PACRR(nn.Module):
 
     def get_param_stats(self):
         return "CO-PACRR: / "
-        #return "PACRR: dense3 weight: "+str(self.dense3.weight.data)+\
-        #" dense2 weight: "+str(self.dense2.weight.data)+" b: "+str(self.dense2.bias.data) +\
-        #" dense weight: "+str(self.dense.weight.data)+" b: "+str(self.dense.bias.data)
+
+    def get_param_secondary(self):
+        return {}

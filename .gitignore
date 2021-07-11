@@ -111,3 +111,7 @@ matchmaker-experiments/
 matchmaker-server-exp/
 matchmaker-troubadix/
 vector_experiments/
+
+# pycharm stuff
+.idea
+retrieval-experiments/

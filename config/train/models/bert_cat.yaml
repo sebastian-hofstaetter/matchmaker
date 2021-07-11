@@ -1,0 +1,7 @@
+model: "bert_cat" 
+
+bert_pretrained_model: "distilbert-base-uncased" 
+#bert_pretrained_model: bert-base-uncased
+#bert_pretrained_model: bert-large-uncased-whole-word-masking
+#bert_pretrained_model: albert-large-v2
+#bert_pretrained_model: google/electra-base-discriminator

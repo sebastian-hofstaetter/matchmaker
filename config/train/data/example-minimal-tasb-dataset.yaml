@@ -1,0 +1,60 @@
+#
+# a minimal dataset configuration file
+# ----------------------------
+# for BERT-based training, where you don't need idfs and the other helper data for some non-bert models
+
+# the folder where experiments are saved
+expirement_base_path: "/path/to/experiments"
+
+#
+# TAS-B training files
+#
+
+dynamic_query_file: "/path/to/train/queries.train.tsv"
+dynamic_collection_file: "/path/to/train/collection.tsv"
+dynamic_pairs_with_teacher_scores: "/path/to/train/T2-train-ids.tsv"
+dynamic_query_cluster_file: "/path/to/train/train_clusters.tsv"
+
+#
+# continuous validation path
+#
+validation_cont:
+  # format: query-id<tab>doc-id<tab>query-text<tab>doc-text
+  tsv: "/path/to/validation/bm25_plain_top100.tsv"
+  qrels: "/path/to/qrels/qrels.dev.tsv"
+  binarization_point: 1 # qrely label >= for MRR,MAP,Recall -> 1 others 0
+  save_only_best: True
+
+#
+# [optional] one time at the end validation (disable by commenting it out)
+# can have multiple entries (a la top1000)
+#
+validation_end:
+  top1000orSomeOtherName:
+    # format: query-id<tab>doc-id<tab>query-text<tab>doc-text
+    tsv: "/path/to/validation/bm25_plain_top1000.tsv"
+    qrels: "/path/to/qrels/qrels.dev.tsv"
+    binarization_point: 1
+    save_secondary_output: True
+
+#
+# test paths (names & datasets must match up with validation end, if optional candidate_set_path is set for re-ranking depth evaluation)
+# can have multiple entries 
+#
+test:
+  top1000orSomeOtherName:
+    # format: query-id<tab>doc-id<tab>query-text<tab>doc-text
+    tsv: "/path/to/test/bm25_plain_top1000.tsv"
+    qrels: "/path/to/qrels/qrels.dev.tsv"
+    binarization_point: 1
+    save_secondary_output: True
+
+#
+# [optional] "leaderboard" for only inference without qrels and evaluation, just creates the ranking
+# comment out if not needed
+#
+leaderboard:
+  msmarco_leaderboard_eval:
+    # format: query-id<tab>doc-id<tab>query-text<tab>doc-text
+    tsv: "/path/to/leaderboard/bm25_plain_top1000.tsv"
+    save_secondary_output: False

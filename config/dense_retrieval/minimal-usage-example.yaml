@@ -1,0 +1,49 @@
+expirement_base_path: <TODO: path to store the experiemnts in>
+
+trained_model: sebastian-hofstaetter/distilbert-dot-tas_b-b256-msmarco
+
+collection_tsv: <TODO: path to a single .tsv file with id<tab>text>
+
+collection_batch_size: 256
+query_batch_size: 1
+
+onnx_use_inference: False
+dataloader_num_workers: 2 # 0 means only using the main thread (not recommended)
+
+query_sets:
+  <name_of_set>:
+    queries_tsv: <TODO: path to a single .tsv file with id<tab>text>
+    qrels: <TODO: path to a trec-style qrels file>
+    binarization_point: 1 # what minimum relevant grade to assume for binarized metrics (mrr, recall ...)
+    top_n: 100 # how many results to return
+  <name_of_set2...>: # optional more than 1 query sets
+    queries_tsv: <TODO: path to a single .tsv file with id<tab>text>
+    qrels: <TODO: path to a trec-style qrels file>
+    binarization_point: 1 # what minimum relevant grade to assume for binarized metrics (mrr, recall ...)
+    top_n: 100 # how many results to return
+    
+# settings for storing vectors
+token_block_size: 50000 # every n vectors create a new numpy memory mapped array file
+token_dim: 768 # sets the output dimension of the model
+token_dtype: "float16" # sets the dtype (either float16 or float32)
+
+#
+# general index 
+#
+faiss_index_type: "hnsw" # or full,ivf,hnsw,scann
+faiss_use_gpu: False
+
+#
+# hnsw settings
+#
+faiss_hnsw_graph_neighbors: 128
+faiss_hnsw_efConstruction: 128 # higher is more accurate and slower to construct
+faiss_hnsw_efSearch: 128
+
+#
+# ivf settings
+#
+faiss_ivf_search_probe_count: 500
+faiss_ivf_list_count: 20000
+
+

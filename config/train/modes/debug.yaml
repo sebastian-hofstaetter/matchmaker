@@ -1,0 +1,31 @@
+batch_size_train: 4
+batch_size_eval: 64
+dataloader_num_workers: 2
+validate_every_n_batches: 40
+
+#submodel_train_cache_path: "C:\\Users\\sebas\\code\\ir-project-matchmaker\\matchmaker-experiments\\bert2k_cache_train_bs8"
+#submodel_validation_cache_path: "C:\\Users\\sebas\\code\\ir-project-matchmaker\\matchmaker-experiments\\bert2k_cache_val"
+#
+#submodel_train_cache_readonly: True
+#submodel_validation_cache_readonly: true
+
+#bert_pretrained_model: microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract
+#bert_pretrained_model: allenai/scibert_scivocab_uncased
+#warmstart_model_path: "C:\\Users\\sebas\\data\\www20\\bps_ck-big_sample4_ndcg2loss.pytorch-state-dict"
+
+
+model: tk
+bert_trainable: True
+
+dynamic_sampler: False
+in_batch_negatives: False
+
+dynamic_teacher: False
+dynamic_teacher_in_batch_scoring: True
+dynamic_teacher_per_term_scores: False
+dynamic_teacher_path: sebastian-hofstaetter/colbert-distilbert-margin_mse-T2-msmarco
+
+train_pairwise_distillation: False
+train_pairwise_distillation_on_passages: False
+max_doc_length: 200
+#loss: "margin-mse" #MSETeacherPointwisePassages #"margin-mse"

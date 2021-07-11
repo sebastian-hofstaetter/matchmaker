@@ -1,0 +1,144 @@
+#
+# Model / training config with all non-path or collection params
+# --------------------------------------------------------------
+
+#
+# meta stuff
+#
+
+validate_every_n_batches: 4000
+validation_cont_use_cache: True
+dataloader_num_workers: 6
+
+model_input_type: auto # auto or independent or concatenated
+token_embedder_type: auto  #"huggingface_bpe" # embedding,bert_cat (concated q,d sequences),bert_embedding (for only the bert embeddings), bert_dot
+train_embedding: True
+sparse_gradient_embedding: False
+
+#
+# we use pytorch's built in mixed-precision training
+# false for fp32 training
+use_fp16: True
+
+use_title_body_sep: False
+use_cls_scoring: False
+minimize_sparsity: False
+
+#
+# pairwise static teacher (needs scores in train_tsv file)
+#
+train_pairwise_distillation: False
+train_pairwise_distillation_on_passages: False
+#
+# multi-task extractive QA training
+#
+train_qa_spans: False
+qa_loss: "StartEndCrossEntropy"
+qa_loss_lambda: 0.2
+
+#
+# dynamic batching system 
+#
+dynamic_sampler: False
+tas_balanced_pair_strategy: "random"
+
+#
+# in-batch negatives -> supported by: bert_dot variants
+#
+in_batch_negatives: False
+in_batch_neg_loss: "lambdarank"
+in_batch_neg_lambda: 0.2
+in_batch_main_pair_lambda: 1
+
+#
+# dynamic teacher
+#
+dynamic_teacher: False
+dynamic_teacher_path: None
+dynamic_teacher_in_batch_scoring: False
+dynamic_teacher_per_term_scores: False
+
+random_seed: 208973249 # real-random (from random.org)
+
+train_data_augment: "none" # "rotate" or "none"
+
+
+store_n_best_checkpoints: 1
+run_dense_retrieval_eval: False
+
+#
+# min steps number, disable with -1
+#
+min_steps_training: 300_000
+
+# needs to be the same model + model_config + token_embedder_type + vocabulary!
+#warmstart_model_path: None
+
+#
+# Models
+# -------------------------------------------------------
+model: "bert_cat"
+
+bert_pretrained_model: "distilbert-base-uncased" 
+bert_trainable: True
+
+#
+# optimization
+#
+
+loss: "ranknet"
+validation_metric: "nDCG@10"
+
+optimizer: "adam"
+
+# default group (all params are in here if not otherwise specified in param_group1_names)
+param_group0_learning_rate: 0.000007
+param_group0_weight_decay: 0
+
+param_group1_names: ["top_k_scoring"] # "position_importance_layer","top_k_scoring" can set a list of network parameters to train at a differetn learning rate, than the rest
+param_group1_learning_rate: 0.0007
+param_group1_weight_decay: 0
+
+embedding_optimizer: "adam"
+embedding_optimizer_learning_rate: 0.000007
+embedding_optimizer_momentum: 0.8 # only when using sgd
+
+# disable with factor = 1 
+learning_rate_scheduler_patience: 15 # * validate_every_n_batches = batch count to check
+learning_rate_scheduler_factor: 0.25
+
+#
+# train loop settings
+#
+epochs: 25
+batch_size_train: 32
+batch_size_eval: 512
+
+gradient_accumulation_steps: -1
+
+early_stopping_patience: 30 # * validate_every_n_batches = batch count to check
+
+#
+# data loading settings
+#
+
+# max sequence lengths, disable cutting off with -1
+max_doc_length: 200
+max_query_length: 30
+
+# min sequence lengths, disable cutting off with -1 , some models (paccr,duet) need this 
+#min_doc_length: 1500
+min_doc_length: -1
+#min_query_length: 30
+min_query_length: -1
+
+#
+# append query_augment_mask_number * [MASK] to the query (originally introduced in the ColBERT paper)
+# disable with -1
+query_augment_mask_number: -1
+
+#
+# interpretability / secondary output 
+#
+secondary_output:
+  top_n: 100

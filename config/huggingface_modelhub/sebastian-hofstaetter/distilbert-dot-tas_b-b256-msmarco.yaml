@@ -1,0 +1,23 @@
+model_checkpoint_from_huggingface: True
+
+# our model settings (creating the right class)
+token_embedder_type: "bert_dot" # meaning the query and document sequences are independent padded tensors
+model: bert_dot # for shared bert model weights (q & d = the same)
+bert_pretrained_model: distilbert-base-uncased
+bert_trainable: True
+
+# training settings
+use_fp16: True
+train_embedding: True
+
+# data loading settings
+use_title_body_sep: False
+max_doc_length: 200
+max_query_length: 30
+
+# disbled min seq. length
+min_doc_length: -1
+min_query_length: -1
+query_augment_mask_number: -1
+
+random_seed: 208973249 # real-random (from random.org)

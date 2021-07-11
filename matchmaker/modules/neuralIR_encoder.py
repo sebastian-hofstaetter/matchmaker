@@ -15,11 +15,15 @@ from allennlp.nn.activations import Activation
 # -------------------------------------------------------
 def get_vectors_n_masks(word_embeddings,query,document):
 
+
     # shape: (batch, query_max,emb_dim)
-    query_embeddings = word_embeddings(query)
+    query_embeddings = word_embeddings({"tokens":{"tokens":query["tokens"]["tokens"]}})
 
     # shape: (batch, document_max,emb_dim)
-    document_embeddings = word_embeddings(document)
+    document_embeddings = word_embeddings({"tokens":{"tokens":document["tokens"]["tokens"]}})
+
+    query = query["tokens"]
+    document = document["tokens"]
 
     # we assume 1 is the unknown token, 0 is padding - both need to be removed
     if "mask" in query: #fasttext embedder
@@ -42,7 +46,9 @@ def get_vectors_n_masks(word_embeddings,query,document):
 def get_single_vectors_n_masks(word_embeddings,sequence):
 
     # shape: (batch, query_max,emb_dim)
-    sequence_embeddings = word_embeddings(sequence)
+    #sequence_embeddings = word_embeddings(sequence)
+    sequence_embeddings = word_embeddings({"tokens":{"tokens":sequence["tokens"]["tokens"]}})
+    sequence = sequence["tokens"]
 
     # we assume 1 is the unknown token, 0 is padding - both need to be removed
     if "mask" in sequence: #fasttext embedder
@@ -70,19 +76,21 @@ class NeuralIR_Encoder(nn.Module):
         self.neural_ir_model = neural_ir_model
 
 
-    def forward(self, query: Dict[str, torch.Tensor], document: Dict[str, torch.Tensor], output_secondary_output: bool = False) -> torch.Tensor:
+    def forward(self, query: Dict[str, torch.Tensor], document: Dict[str, torch.Tensor],
+                use_fp16:bool = True, output_secondary_output: bool = False) -> torch.Tensor:
         # pylint: disable=arguments-differ
+        with torch.cuda.amp.autocast(enabled=use_fp16):
 
-        query_embeddings,document_embeddings,query_mask,document_mask = get_vectors_n_masks(self.word_embeddings,query,document)
-
-        inner_model_result = self.neural_ir_model.forward(query_embeddings, document_embeddings,
-                                                          query_mask, document_mask, output_secondary_output)
-
-        return inner_model_result
+            query_embeddings,document_embeddings,query_mask,document_mask = get_vectors_n_masks(self.word_embeddings,query,document)
     
-    def forward_representation(self, sequence: Dict[str, torch.Tensor]) -> torch.Tensor:
+            inner_model_result = self.neural_ir_model.forward(query_embeddings, document_embeddings,
+                                                              query_mask, document_mask, output_secondary_output)
+    
+            return inner_model_result
+    
+    def forward_representation(self, sequence: Dict[str, torch.Tensor], sequence_type:str) -> torch.Tensor:
         seq,mask = get_single_vectors_n_masks(self.word_embeddings,sequence)
-        return self.neural_ir_model.forward_representation(seq,mask)
+        return self.neural_ir_model.forward_representation(seq,mask, sequence_type)
 
     def get_param_stats(self):
         return self.neural_ir_model.get_param_stats()
@@ -106,19 +114,21 @@ class NeuralIR_Encoder_WithIds(nn.Module):
         self.neural_ir_model = neural_ir_model
 
 
-    def forward(self, query: Dict[str, torch.Tensor], document: Dict[str, torch.Tensor], output_secondary_output: bool = False) -> torch.Tensor:
+    def forward(self, query: Dict[str, torch.Tensor], document: Dict[str, torch.Tensor],
+                use_fp16:bool = True, output_secondary_output: bool = False) -> torch.Tensor:
         # pylint: disable=arguments-differ
+        with torch.cuda.amp.autocast(enabled=use_fp16):
 
-        query_embeddings,document_embeddings,query_mask,document_mask = get_vectors_n_masks(self.word_embeddings,query,document)
+            query_embeddings,document_embeddings,query_mask,document_mask = get_vectors_n_masks(self.word_embeddings,query,document)
 
-        query_ids = query["tokens"]
-        doc_ids = document["tokens"]
+            query_ids = query["tokens"]
+            doc_ids = document["tokens"]
 
-        inner_model_result = self.neural_ir_model.forward(query_embeddings, document_embeddings,
-                                                          query_mask, document_mask,
-                                                          query_ids, doc_ids, output_secondary_output)
+            inner_model_result = self.neural_ir_model.forward(query_embeddings, document_embeddings,
+                                                              query_mask, document_mask,
+                                                              query_ids, doc_ids, output_secondary_output)
 
-        return inner_model_result
+            return inner_model_result
         
     def get_param_stats(self):
         return self.neural_ir_model.get_param_stats()
@@ -140,23 +150,94 @@ class NeuralIR_Encoder_WithIdfs(nn.Module):
         super(NeuralIR_Encoder_WithIdfs, self).__init__()
 
         self.word_embeddings = word_embeddings
-        self.word_idfs = word_idfs
+        self.word_embeddings_idfs = word_idfs
         self.neural_ir_model = neural_ir_model
 
 
-    def forward(self, query: Dict[str, torch.Tensor], document: Dict[str, torch.Tensor], output_secondary_output: bool = False) -> torch.Tensor:
+    def forward(self, query: Dict[str, torch.Tensor], document: Dict[str, torch.Tensor],
+                use_fp16:bool = True, output_secondary_output: bool = False) -> torch.Tensor:
         # pylint: disable=arguments-differ
+        with torch.cuda.amp.autocast(enabled=use_fp16):
 
-        query_embeddings,document_embeddings,query_mask,document_mask = get_vectors_n_masks(self.word_embeddings,query,document)
+            query_embeddings,document_embeddings,query_mask,document_mask = get_vectors_n_masks(self.word_embeddings,query,document)
 
-        query_idfs = self.word_idfs(query)
-        doc_idfs = self.word_idfs(document)
+            query_idfs = self.word_embeddings_idfs(query)
+            doc_idfs = self.word_embeddings_idfs(document)
 
-        inner_model_result = self.neural_ir_model.forward(query_embeddings, document_embeddings,
-                                                          query_mask, document_mask,
-                                                          query_idfs, doc_idfs, output_secondary_output)
-        return inner_model_result
+            inner_model_result = self.neural_ir_model.forward(query_embeddings, document_embeddings,
+                                                              query_mask, document_mask,
+                                                              query_idfs, doc_idfs, output_secondary_output)
+            return inner_model_result
+
+    def forward_representation(self, sequence: Dict[str, torch.Tensor], sequence_type:str) -> torch.Tensor:
+        seq,mask = get_single_vectors_n_masks(self.word_embeddings,sequence)
+        return self.neural_ir_model.forward_representation(seq,mask, sequence_type)
+
+    def get_param_stats(self):
+        return self.neural_ir_model.get_param_stats()
+
+    def get_param_secondary(self):
+        return self.neural_ir_model.get_param_secondary()
+
+class NeuralIR_Encoder_WithIdfs_PassThrough(nn.Module):
+    '''
+    Needs a neural IR model as paramter with a forward() that gets word ids & embedders as parameters (for full control)
+    '''
+
+    def __init__(self,
+                 word_embeddings: TextFieldEmbedder,
+                 word_idfs: TextFieldEmbedder,
+                 neural_ir_model: nn.Module):
+
+        super(NeuralIR_Encoder_WithIdfs_PassThrough, self).__init__()
+
+        self.word_embeddings = word_embeddings
+        self.word_embeddings_idfs = word_idfs
+        self.neural_ir_model = neural_ir_model
+
+
+    def forward(self, query: Dict[str, torch.Tensor], document: Dict[str, torch.Tensor],
+                use_fp16:bool = True, output_secondary_output: bool = False) -> torch.Tensor:
+        # pylint: disable=arguments-differ
+        with torch.cuda.amp.autocast(enabled=use_fp16):
+            inner_model_result = self.neural_ir_model.forward(self.word_embeddings, self.word_embeddings_idfs,
+                                                              query, document, output_secondary_output)
+            return inner_model_result
     
+    def get_param_stats(self):
+        return self.neural_ir_model.get_param_stats()
+
+    def get_param_secondary(self):
+        return self.neural_ir_model.get_param_secondary()
+
+class NeuralIR_Encoder_PassThrough(nn.Module):
+    '''
+    Needs a neural IR model as paramter with a forward() that gets word ids & embedders as parameters (for full control)
+    '''
+
+    def __init__(self,
+                 word_embeddings: TextFieldEmbedder,
+                 neural_ir_model: nn.Module):
+
+        super(NeuralIR_Encoder_PassThrough, self).__init__()
+
+        self.word_embeddings = word_embeddings
+        self.neural_ir_model = neural_ir_model
+
+
+    def forward(self, query: Dict[str, torch.Tensor], document: Dict[str, torch.Tensor],title=None, output_secondary_output: bool = False) -> torch.Tensor:
+        # pylint: disable=arguments-differ
+        if title == None:
+            return self.neural_ir_model.forward(self.word_embeddings, query, document, output_secondary_output)
+        else:
+            return self.neural_ir_model.forward(self.word_embeddings, query, document, title, output_secondary_output)
+
+    def forward_representation(self, sequence: Dict[str, torch.Tensor],title: Dict[str, torch.Tensor]=None, sequence_type:str=None) -> torch.Tensor:
+        if title == None:
+            return self.neural_ir_model.forward_representation(self.word_embeddings,sequence, sequence_type)
+        else:
+            return self.neural_ir_model.forward_representation(self.word_embeddings,sequence,title, sequence_type)
+
     def get_param_stats(self):
         return self.neural_ir_model.get_param_stats()
 

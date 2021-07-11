@@ -1,0 +1,75 @@
+
+# per model params: specify with modelname_param: ...
+# ----------------------------------------------------
+#
+
+idcm_sample_train_type: "lambdaloss"
+# disable sampling with -1
+idcm_sample_n: -1
+idcm_sample_context: "ck"
+idcm_use_mult_pos_importance: False
+idcm_top_k_chunks: 3
+idcm_chunk_size: 50
+idcm_overlap: 7
+
+tk_att_heads: 10
+tk_att_layer: 2
+tk_att_ff_dim: 100
+tk_mix_hybrid_context: False
+tk_use_diff_posencoding: True
+
+tk_kernels_mu: [1.0, 0.9, 0.7, 0.5, 0.3, 0.1, -0.1, -0.3, -0.5, -0.7, -0.9]
+tk_kernels_sigma: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+
+# tk v6
+
+tk_att_proj_dim: 32
+tk_use_pos_agnostic: False
+tk_use_position_bias: False
+tk_position_bias_bin_percent: 0.2
+tk_position_bias_absolute_steps: 4
+
+# tk vnext
+
+tk_saturation_type: "embedding"
+
+tk_use_pos_encoding: True
+bert_emb_pos: False
+bert_emb_keep_layers: False
+bert_emb_layers: 6
+
+knrm_kernels: 11
+
+conv_knrm_ngrams: 3
+conv_knrm_kernels: 11
+conv_knrm_conv_out_dim: 128 # F in the paper 
+
+match_pyramid_conv_output_size : [16,16,16,16,16] 
+match_pyramid_conv_kernel_size : [[3,3],[3,3],[3,3],[3,3],[3,3]]
+match_pyramid_adaptive_pooling_size: [[36,90],[18,60],[9,30],[6,20],[3,10]]
+
+mv_lstm_hidden_dim: 32
+mv_top_k: 10
+
+pacrr_unified_query_length: 30
+pacrr_unified_document_length: 200
+pacrr_max_conv_kernel_size: 3
+pacrr_conv_output_size: 32
+pacrr_kmax_pooling_size: 5
+
+salc_conv_knrm_kernels: 11
+salc_conv_knrm_conv_out_dim: 128
+salc_conv_knrm_dropi: 0 
+salc_conv_knrm_drops: 0
+salc_conv_knrm_salc_dim: 300
+
+salc_knrm_kernels: 11
+salc_knrm_dropi: 0
+salc_knrm_drops: 0
+salc_knrm_salc_dim: 300
+
+mm_light_kernels: 11
+
+colbert_compression_dim: 768
+parade_aggregate_layers: 2
+parade_aggregate_type: max # or tf

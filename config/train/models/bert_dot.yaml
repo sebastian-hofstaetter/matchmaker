@@ -1,0 +1,5 @@
+model: bert_dot # for shared bert model weights (q & d = the same)
+
+#bert_dot_compress_dim: 128 # or -1 for no compression
+
+run_dense_retrieval_eval: True

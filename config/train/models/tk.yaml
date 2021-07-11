@@ -1,0 +1,19 @@
+token_embedder_type: "embedding" 
+model: "TK" 
+
+sparse_gradient_embedding: True
+embedding_optimizer: sparse_adam
+use_fp16: False
+
+param_group0_learning_rate: 0.00001
+param_group1_names: ["kernel_bin_weights","kernel_alpha_scaler"]
+param_group1_learning_rate: 0.0001
+
+tk_att_heads: 10
+tk_att_layer: 2
+tk_att_ff_dim: 300
+tk_mix_hybrid_context: True
+tk_use_diff_posencoding: True
+
+tk_kernels_mu: [1.0, 0.9, 0.7, 0.5, 0.3, 0.1, -0.1, -0.3, -0.5, -0.7, -0.9]
+tk_kernels_sigma: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
