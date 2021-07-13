@@ -82,7 +82,7 @@ Depending on the type of model, we have guides the explain required configuratio
 
 | Model                          | Type        | Distillation Support      | Guide |
 |----------------------------    |-------      |------------------------- |-------|
-| **BERT_DOT (Dense Retriever)** | *Passage*   | [Optional] Margin-MSE    | [dense_retrieval_train_margin-mse.md](documentation/dense_retrieval_train_margin-mse.md)  |
+| **BERT_DOT (Dense Retriever)** | *Passage*   | [Optional] Margin-MSE    | [dense_retrieval_train.md](documentation/dense_retrieval_train.md)  |
 | **BERT_DOT (Dense Retriever)** | *Passage*   | TAS-Balanced             | [dense_retrieval_train_tas-balanced.md](documentation/dense_retrieval_train_tas-balanced.md)      |
 | **BERT_CAT**                   | *Passage*   | [Optional] Margin-MSE    | [reranking_bert-cat.md](documentation/reranking_bert-cat.md)      |
 | **TK**                         | *Passage*   | [Optional] Margin-MSE    | [reranking_tk_ecai20.md](documentation/reranking_tk_ecai20.md)      |
