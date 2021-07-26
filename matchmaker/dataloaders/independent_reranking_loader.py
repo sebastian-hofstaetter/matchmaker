@@ -2,6 +2,7 @@ from typing import Dict
 
 from overrides import overrides
 import numpy as np
+import torch
 
 from allennlp.common.checks import ConfigurationError
 from allennlp.common.file_utils import cached_path
@@ -131,9 +132,9 @@ class IndependentReRankingDatasetReader(DatasetReader):
             if self.max_doc_length > -1:
                 doc_tokenized = doc_tokenized[:self.max_doc_length]
             if self.min_doc_length > -1 and len(doc_tokenized) < self.min_doc_length:
-                doc_tokenized = doc_tokenized + [self.padding_value] * (self.min_doc_length - len(doc_doc_tokenizedpos_tokenized))
+                doc_tokenized = doc_tokenized + [self.padding_value] * (self.min_doc_length - len(doc_tokenized))
 
-            doc_pos_field = TextField(doc_pos_tokenized)
+            doc_field = TextField(doc_tokenized)
 
         if doc_title != None:
             
