@@ -87,11 +87,13 @@ class ColBERT(PreTrainedModel):
 
     def forward_representation(self,  # type: ignore
                                tokens: Dict[str, torch.LongTensor],
-                               sequence_type=None) -> Dict[str, torch.Tensor]:
+                               sequence_type=None,
+                               normalise=False) -> Dict[str, torch.Tensor]:
         
         vecs = self.bert_model(**tokens)[0]
         vecs = self.compressor(vecs)
-
+        if normalise:
+            vecs = torch.nn.functional.normalize(vecs, p=2.0, dim=-1, eps=1e-9)
         if sequence_type == "doc_encode" or sequence_type == "query_encode":
             vecs = vecs * tokens["attention_mask"].unsqueeze(-1)
 
