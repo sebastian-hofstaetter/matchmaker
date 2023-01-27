@@ -6,7 +6,7 @@ tensorboard==2.5.0
 transformers==4.8.1
 rich==10.1.0
 # onnx stuff
-onnx==1.9.0                   
+onnx==1.13.0                   
 onnxconverter-common==1.8.1   
 onnxruntime-gpu==1.8.0
 # extra for onnx optimizations (missing from the onnx dependencies, ups)
